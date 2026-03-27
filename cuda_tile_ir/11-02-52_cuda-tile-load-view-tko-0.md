@@ -1,0 +1,45 @@
+---
+title: "11.2.52. cuda_tile.load_view_tko_0"
+section: "11.2.52"
+source: "https://docs.nvidia.com/cuda/tile-ir/latest/sections/appendix.html#cuda-tile-load-view-tko-0"
+---
+
+### [11.2.52. cuda_tile.load_view_tko_0](https://docs.nvidia.com/cuda/tile-ir/latest/sections#cuda-tile-load-view-tko-0)[](https://docs.nvidia.com/cuda/tile-ir/latest/sections/#cuda-tile-load-view-tko-0 "Permalink to this headline")
+
+```mlir
+cuda_tile.module @module {
+  entry @example(%ptr: tile<ptr<f32>>, %index: tile<i32>) {
+     %tensor_view = make_tensor_view %ptr, shape=[8192, 128], strides=[128, 1]
+       : tensor_view<8192x128xf32, strides=[128,1]>
+
+     // This example uses the PartitionView on a 8192x128xf32 tensor_view,
+     // dividing the tensor_view in tiles of 64x64.
+
+     %view = make_partition_view %tensor_view : partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>
+
+     %c0 = constant <i32: 0> : tile<i32>
+     %c1 = constant <i32: 1> : tile<i32>
+
+     // Load a tile at index (0, 0) in the view's index space.
+     // For this PartitionView, this is the rectangular tile such that
+     // X=[0,64) and Y=[0,64), in the coordinates of tiles.
+     %tile0, %res_token0 = load_view_tko weak %view[%c0, %c0]
+       : partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> tile<64x64xf32>, token
+
+     // Load a tile at index (0, 1) in the view's index space.
+     // For this PartitionView, this is the rectangular tile such that
+     // X=[0,64) and Y=[64,128), in the coordinates of tiles.
+     %tile1, %res_token1 = load_view_tko weak %view[%c0, %c1]
+       : partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> tile<64x64xf32>, token
+
+     // Same example as above but with memory token as input.
+     %token = make_token : token
+     %tile2, %res_token2 = load_view_tko weak %view[%c0, %c1] token = %token
+       : partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> tile<64x64xf32>, token
+
+     // Loads a tile at the dynamic index (%index, %index) in the view's index space.
+     %tile3, %res_token3 = load_view_tko weak %view[%index, %index]
+       : partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> tile<64x64xf32>, token
+  }
+}
+```

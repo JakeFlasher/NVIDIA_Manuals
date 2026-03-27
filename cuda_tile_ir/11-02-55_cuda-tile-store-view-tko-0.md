@@ -1,0 +1,43 @@
+---
+title: "11.2.55. cuda_tile.store_view_tko_0"
+section: "11.2.55"
+source: "https://docs.nvidia.com/cuda/tile-ir/latest/sections/appendix.html#cuda-tile-store-view-tko-0"
+---
+
+### [11.2.55. cuda_tile.store_view_tko_0](https://docs.nvidia.com/cuda/tile-ir/latest/sections#cuda-tile-store-view-tko-0)[](https://docs.nvidia.com/cuda/tile-ir/latest/sections/#cuda-tile-store-view-tko-0 "Permalink to this headline")
+
+```mlir
+cuda_tile.module @module {
+  entry @example(%ptr: tile<ptr<f32>>) {
+     %tensor_view = make_tensor_view %ptr, shape=[8192, 128], strides=[128,1] :
+       tensor_view<8192x128xf32, strides=[128,1]>
+
+     // This example uses the PartitionView on a 8192x128xf32 tensor_view,
+     // dividing the tensor_view in tiles of 64x64.
+     %view = make_partition_view %tensor_view :
+       partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>
+
+     %c0 = constant <i32: 0> : tile<i32>
+     %c1 = constant <i32: 1> : tile<i32>
+
+     %tile = constant <f32: 0.0> : tile<64x64xf32>
+
+     // Store a tile at index (0, 0) in the view's index space.
+     // For this TilePartitionView, this is the rectangular tile such that
+     // X=[0,64) and Y=[0,64), in the coordinates of tiles.
+     %res_token0 = store_view_tko weak %tile, %view[%c0, %c0]
+       : tile<64x64xf32>, partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> token
+
+     // Store a tile at index (0, 1) in the view's index space.
+     // For this PartitionView, this is the rectangular tile such that
+     // X=[0,64) and Y=[64,128), in the coordinates of tiles.
+     %res_token1 = store_view_tko weak %tile, %view[%c0, %c1]
+       : tile<64x64xf32>, partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> token
+
+     // Same example as above but with input token.
+     %token = make_token : token
+     %res_token2 = store_view_tko weak %tile, %view[%c0, %c1] token = %token
+       : tile<64x64xf32>, partition_view<tile=(64x64), tensor_view<8192x128xf32, strides=[128,1]>>, tile<i32> -> token
+    }
+  }
+```

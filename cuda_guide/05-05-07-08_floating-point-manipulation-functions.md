@@ -1,0 +1,25 @@
+---
+title: "5.5.7.8. Floating-Point Manipulation Functions"
+section: "5.5.7.8"
+source: "https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/mathematical-functions.html#floating-point-manipulation-functions"
+---
+
+### [5.5.7.8. Floating-Point Manipulation Functions](https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices#floating-point-manipulation-functions)[](https://docs.nvidia.com/cuda/cuda-programming-guide/05-appendices/#floating-point-manipulation-functions "Permalink to this headline")
+
+[CUDA Math API](https://docs.nvidia.com/cuda/cuda-math-api/index.html) for floating-point manipulation functions are available in both host and device code, except for  `__float128`.
+
+Floating-point manipulation functions are not natively available for CUDA-extended floating-point types, such as `__half` and `__nv_bfloat16`. In these cases, the functions are emulated by converting to a `float` type and then converting the result back.
+
+All the following functions have a maximum ULP error of zero.
+
+| `cuda::std` Function | Meaning | `float` | `double` | `__float128` |
+| --- | --- | --- | --- | --- |
+| [frexp(x, exp)](https://en.cppreference.com/w/cpp/numeric/math/frexp.html) | Extract mantissa and exponent | [frexpf(x, exp)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv46frexpffPi) | [frexp(x, exp)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv45frexpdPi) | [__nv_fp128_frexp(x, nptr)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__QUAD.html#_CPPv416__nv_fp128_frexpgPi) |
+| [ldexp(x, n)](https://en.cppreference.com/w/cpp/numeric/math/ldexp.html) | \(\(x \cdot 2^{\mathrm{n}}\)\) | [ldexpf(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv46ldexpffi) | [ldexp(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv45ldexpdi) | [__nv_fp128_ldexp(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__QUAD.html#_CPPv416__nv_fp128_ldexpgi) |
+| [modf(x, iptr)](https://en.cppreference.com/w/cpp/numeric/math/modf.html) | Extract integer and fractional parts | [modff(x, iptr)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv45modfffPf) | [modf(x, iptr)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv44modfdPd) | [__nv_fp128_modf(x, iptr)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__QUAD.html#_CPPv415__nv_fp128_modfgPg) |
+| [scalbn(x, n)](https://en.cppreference.com/w/cpp/numeric/math/scalbn.html) | \(\(x \cdot 2^n\)\) | [scalbnf(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv47scalbnffi) | [scalbn(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv46scalbndi) | N/A |
+| [scalbln(x, n)](https://en.cppreference.com/w/cpp/numeric/math/scalbn.html) | \(\(x \cdot 2^n\)\) | [scalblnf(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv48scalblnffl) | [scalbln(x, n)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv47scalblndl) | N/A |
+| [ilogb(x)](https://en.cppreference.com/w/cpp/numeric/math/ilogb.html) | \(\(\lfloor \log_2(\|x\|) \rfloor\)\) | [ilogbf(x)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv46ilogbff) | [ilogb(x)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv45ilogbd) | [__nv_fp128_ilogb(x)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__QUAD.html#_CPPv416__nv_fp128_ilogbg) |
+| [logb(x)](https://en.cppreference.com/w/cpp/numeric/math/logb.html) | \(\(\lfloor \log_2(\|x\|) \rfloor\)\) | [logbf(x)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv45logbff) | [logb(x)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv44logbd) | N/A |
+| [nextafter(x, y)](https://en.cppreference.com/w/cpp/numeric/math/nextafter.html) | Next representable value toward \(\(y\)\) | [nextafterf(x, y)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv410nextafterfff) | [nextafter(x, y)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv49nextafterdd) | N/A |
+| [copysign(x, y)](https://en.cppreference.com/w/cpp/numeric/math/copysign.html) | Copy sign of \(\(y\)\) to \(\(x\)\) | [copysignf(x, y)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__SINGLE.html#_CPPv49copysignfff) | [copysign(x, y)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__DOUBLE.html#_CPPv48copysigndd) | [__nv_fp128_copysign(x, y)](https://docs.nvidia.com/cuda/cuda-math-api/cuda_math_api/group__CUDA__MATH__QUAD.html#_CPPv419__nv_fp128_copysigngg) |

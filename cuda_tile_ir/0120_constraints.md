@@ -1,0 +1,13 @@
+---
+title: "Constraints"
+section: ""
+source: "https://docs.nvidia.com/cuda/tile-ir/latest/sections/operations.html#constraints"
+---
+
+#### [Constraints](https://docs.nvidia.com/cuda/tile-ir/latest/sections#constraints)[](https://docs.nvidia.com/cuda/tile-ir/latest/sections/#constraints "Permalink to this headline")
+
+- Operation speculation safety must be determined by operands and attributes.
+- Operation must be safe to execute speculatively without side effects.
+- Operation must not perform any memory side effects.
+- `source` and `result` must have the same element type (tile).
+- `source` and `result` must have the same rank.
